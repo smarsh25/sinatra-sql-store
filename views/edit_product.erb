@@ -6,7 +6,7 @@
 
   <p>
     <label>Price:</label>
-    <input type="number" name="price" value="<%=@product["id"]%>">
+    <input type="number" name="price" value="<%=@product["price"]%>">
   </p>
 
   <p>
@@ -17,9 +17,9 @@
   <p>
     <label>Category:</label>
     <select name="category_id">
-      <option value="none" <% if @product_category == "0"%>selected<% end %>>-none-</option> 
+      <option value="none" <% if @product["c_name"] == nil %>selected<% end %>>-none-</option> 
       <% @categories.each do |category| %>
-      <option value="<%= category["id"] %>" <% if @product_category == category["id"]%>selected<% end %>><%= category["name"] %></option>
+      <option value="<%= category["id"] %>" <% if @product["c_name"] == category["name"] %>selected<% end %>><%= category["name"] %></option>
       <% end %>
     </select>
   </p>

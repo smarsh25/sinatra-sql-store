@@ -91,13 +91,17 @@ end
 
 get '/products/:id/edit' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
-  @product = c.exec_params("SELECT * FROM products WHERE products.id = $1", [params["id"]]).first
+  # @product = c.exec_params("SELECT * FROM products WHERE products.id = $1", [params["id"]]).first
 
-  # get the products current category.
-  product_category_result = c.exec_params("SELECT category_id FROM product_category WHERE product_category.product_id = $1", [params["id"]]).first
-  product_category_result == nil ? @product_category = "0" : @product_category = product_category_result["category_id"]
-  # binding.pry
+  @product = c.exec_params("SELECT p.name, p.price, p.description, c.name AS c_name, c.id AS c_id
+                                FROM products AS p
+                              LEFT OUTER JOIN product_category AS pc on p.id = pc.product_id 
+                              LEFT OUTER JOIN categories AS c on pc.category_id = c.id 
+                              WHERE p.id = $1;", [params[:id]]).first
+
+  # get the list of categories to display in erb
   @categories = c.exec_params("SELECT id, name FROM categories;")  
+
   c.close
   erb :edit_product
 end
@@ -117,7 +121,7 @@ get '/products/:id' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   # @product = c.exec_params("SELECT name, price, description FROM products AS p WHERE p.id = $1;", [params[:id]]).first
 
-  @product = c.exec_params("SELECT p.name, p.price, p.description, c.name AS c_name, c.id AS c_id FROM products AS p
+  @product = c.exec_params("SELECT p.id, p.name, p.price, p.description, c.name AS c_name, c.id AS c_id FROM products AS p
                               LEFT OUTER JOIN product_category AS pc on p.id = pc.product_id 
                               LEFT OUTER JOIN categories AS c on pc.category_id = c.id 
                               WHERE p.id = $1;", [params[:id]]).first

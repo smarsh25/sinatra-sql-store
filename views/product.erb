@@ -3,7 +3,7 @@
 <p> Descritption: <%= @product["description"] %></p>
 <p> Category: <%= @product["c_name"] %></p>
 
-<a href="<%=@product["id"]%>/edit"> Edit this product.</a>
+<a href="/products/<%= @product["id"] %>/edit"> Edit this product.</a>
 <form action="/products/<%= @product["id"] %>/destroy" method="post">
     <input type="submit" name="" value="Delete this product.">
 </form>
