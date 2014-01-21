@@ -34,9 +34,9 @@ end
 get '/products/new' do
   # Get all rows from the categories table.
   c = PGconn.new(:host => "localhost", :dbname => dbname)
-  @categories = c.exec_params("SELECT name FROM categories;")
+  @categories = c.exec_params("SELECT id, name FROM categories;")
   c.close
-# binding.pry
+
   erb :new_product
 end
 
@@ -51,6 +51,11 @@ post '/products' do
   # Assuming you created your products table with "id SERIAL PRIMARY KEY",
   # This will get the id of the product you just created.
   new_product_id = c.exec_params("SELECT currval('products_id_seq');").first["currval"]
+
+  # create a record in product_category table to show the relation to category
+  c.exec_params("INSERT INTO product_category (product_id, category_id) VALUES ($1,$2)",
+                  [new_product_id, params["category_id"].to_i])
+  
   c.close
   redirect "/products/#{new_product_id}"
 end

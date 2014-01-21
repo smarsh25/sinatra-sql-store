@@ -16,10 +16,10 @@
 
   <p>
     <label>Category:</label>
-    <select name="category">
-      <option value="none" selected> -none- </option> 
+    <select name="category_id">
+      <option value="0" selected>-none-</option> 
       <% @categories.each do |category| %>
-      <option value="<%= category["name"] %>"><%= category["name"] %></option>
+      <option value="<%= category["id"] %>"><%= category["name"] %></option>
       <% end %>
     </select>
   </p>
