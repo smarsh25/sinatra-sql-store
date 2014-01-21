@@ -45,3 +45,24 @@ def seed_products_table
   end
   c.close
 end
+
+def create_categories_table
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+  c.exec %q{
+  CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name varchar(255)
+  );
+  }
+  c.close
+end
+
+def seed_categories_table
+  categories = [["Sporting Goods"], ["Kitchen"], ["Garden"]]
+
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+  categories.each do |category_name|
+    c.exec_params("INSERT INTO categories (name) VALUES ($1);", category_name)
+  end
+  c.close
+end
