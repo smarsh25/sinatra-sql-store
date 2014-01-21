@@ -17,9 +17,9 @@
   <p>
     <label>Category:</label>
     <select name="category_id">
-      <option value="0" selected>-none-</option> 
+      <option value="none" <% if @product_category == "0"%>selected<% end %>>-none-</option> 
       <% @categories.each do |category| %>
-      <option value="<%= category["id"] %>"><%= category["name"] %></option>
+      <option value="<%= category["id"] %>" <% if @product_category == category["id"]%>selected<% end %>><%= category["name"] %></option>
       <% end %>
     </select>
   </p>
