@@ -52,9 +52,12 @@ post '/products' do
   # This will get the id of the product you just created.
   new_product_id = c.exec_params("SELECT currval('products_id_seq');").first["currval"]
 
+  # IF a category was chosen...
   # create a record in product_category table to show the relation to category
-  c.exec_params("INSERT INTO product_category (product_id, category_id) VALUES ($1,$2)",
+  if params["category_id"] != "none"
+    c.exec_params("INSERT INTO product_category (product_id, category_id) VALUES ($1,$2)",
                   [new_product_id, params["category_id"].to_i])
+  end
   
   c.close
   redirect "/products/#{new_product_id}"
@@ -74,10 +77,11 @@ end
 get '/products/:id/edit' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   @product = c.exec_params("SELECT * FROM products WHERE products.id = $1", [params["id"]]).first
-  
+  @categories = c.exec_params("SELECT id, name FROM categories;")  
   c.close
   erb :edit_product
 end
+
 # DELETE to delete a product
 post '/products/:id/destroy' do
 

@@ -17,7 +17,7 @@
   <p>
     <label>Category:</label>
     <select name="category_id">
-      <option value="0" selected>-none-</option> 
+      <option value="none" selected>-none-</option> 
       <% @categories.each do |category| %>
       <option value="<%= category["id"] %>"><%= category["name"] %></option>
       <% end %>
