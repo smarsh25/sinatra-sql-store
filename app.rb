@@ -32,6 +32,11 @@ end
 
 # Get the form for creating a new product
 get '/products/new' do
+  # Get all rows from the categories table.
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+  @categories = c.exec_params("SELECT name FROM categories;")
+  c.close
+# binding.pry
   erb :new_product
 end
 
@@ -64,6 +69,7 @@ end
 get '/products/:id/edit' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   @product = c.exec_params("SELECT * FROM products WHERE products.id = $1", [params["id"]]).first
+  
   c.close
   erb :edit_product
 end

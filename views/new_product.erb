@@ -15,6 +15,16 @@
   </p>
 
   <p>
+    <label>Category:</label>
+    <select name="category">
+      <option value="none" selected> -none- </option> 
+      <% @categories.each do |category| %>
+      <option value="<%= category["name"] %>"><%= category["name"] %></option>
+      <% end %>
+    </select>
+  </p>
+
+  <p>
     <input type="submit" name="" value=" Create the new product.">
   </p>
 </form>
