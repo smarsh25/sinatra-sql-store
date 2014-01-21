@@ -91,7 +91,6 @@ end
 
 get '/products/:id/edit' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
-  # @product = c.exec_params("SELECT * FROM products WHERE products.id = $1", [params["id"]]).first
 
   @product = c.exec_params("SELECT p.id, p.name, p.price, p.description, c.name AS c_name, c.id AS c_id
                                 FROM products AS p
@@ -158,5 +157,24 @@ post '/categories' do
   c.close
   # redirect "/categories/#{new_category_id}"
   redirect "/categories"
+end
+
+# GET the show page for a particular category
+get '/categories/:id' do
+  
+  @category_id = params["id"]
+
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+
+  @products = c.exec_params("SELECT c.name AS category_name, p.name AS product_name
+                              FROM categories AS c 
+                            INNER JOIN product_category AS pc on c.id = pc.category_id 
+                            LEFT OUTER JOIN products AS p on pc.product_id = p.id
+                            WHERE c.id = $1 ORDER BY p.name;", [params[:id]])
+  @no_products = @products.to_a.empty?
+  # @category_name = @products[]
+
+  c.close
+  erb :category
 end
 
