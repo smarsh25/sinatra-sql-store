@@ -66,3 +66,16 @@ def seed_categories_table
   end
   c.close
 end
+
+def create_relations_table
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+  c.exec %q{
+  CREATE TABLE product_category (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER,
+    category_id INTEGER
+  );
+  }
+  c.close
+end
+

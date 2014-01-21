@@ -94,3 +94,23 @@ get '/categories' do
   erb :categories
 end
 
+# Get the form for creating a new product
+get '/categories/new' do
+  erb :new_category
+end
+
+# POST to create a new category
+post '/categories' do
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+
+  # Insert the new row into the categories table.
+  c.exec_params("INSERT INTO categories (name) VALUES ($1)", [params["name"]])
+
+  # Assuming you created your categories table with "id SERIAL PRIMARY KEY",
+  # This will get the id of the product you just created.
+  new_category_id = c.exec_params("SELECT currval('categories_id_seq');").first["currval"]
+  c.close
+  # redirect "/categories/#{new_category_id}"
+  redirect "/categories"
+end
+
