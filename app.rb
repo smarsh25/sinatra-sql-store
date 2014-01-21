@@ -162,6 +162,8 @@ end
 # GET the show page for a particular category
 get '/categories/:id' do
   
+  @category_id = params[:id]
+
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   @category_name = c.exec_params("SELECT name FROM categories WHERE id = $1;", [params[:id]]).first["name"]
 
@@ -177,3 +179,12 @@ get '/categories/:id' do
   erb :category
 end
 
+# DELETE to delete a category
+post '/categories/:id/destroy' do
+
+  c = PGconn.new(:host => "localhost", :dbname => dbname)
+  c.exec_params("DELETE FROM categories WHERE categories.id = $1", [params[:id]])
+  c.exec_params("DELETE FROM product_category WHERE product_category.category_id = $1", [params[:id]])
+  c.close
+  redirect '/categories'
+end
