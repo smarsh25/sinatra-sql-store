@@ -162,9 +162,8 @@ end
 # GET the show page for a particular category
 get '/categories/:id' do
   
-  @category_id = params["id"]
-
   c = PGconn.new(:host => "localhost", :dbname => dbname)
+  @category_name = c.exec_params("SELECT name FROM categories WHERE id = $1;", [params[:id]]).first["name"]
 
   @products = c.exec_params("SELECT c.name AS category_name, p.name AS product_name
                               FROM categories AS c 
