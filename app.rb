@@ -83,6 +83,7 @@ post '/products/:id/destroy' do
 
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   c.exec_params("DELETE FROM products WHERE products.id = $1", [params["id"]])
+  c.exec_params("DELETE FROM product_category WHERE product_category.product_id = $1", [params["id"]])
   c.close
   redirect '/products'
 end
