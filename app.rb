@@ -25,7 +25,7 @@ get '/products' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
 
   # Get all rows from the products table.
-  @products = c.exec_params("SELECT * FROM products;")
+  @products = c.exec_params("SELECT * FROM products ORDER BY name;")
   c.close
   erb :products
 end
@@ -82,7 +82,7 @@ post '/products/:id' do
   if params["category_id"] != "none"
     # save the
     c.exec_params("INSERT INTO product_category (product_id, category_id) VALUES ($1,$2)",
-          [params["id"], params["category_id"].to_i])
+          [params["id"], params["category_id"]])
   end
 
   c.close
@@ -93,7 +93,7 @@ get '/products/:id/edit' do
   c = PGconn.new(:host => "localhost", :dbname => dbname)
   # @product = c.exec_params("SELECT * FROM products WHERE products.id = $1", [params["id"]]).first
 
-  @product = c.exec_params("SELECT p.name, p.price, p.description, c.name AS c_name, c.id AS c_id
+  @product = c.exec_params("SELECT p.id, p.name, p.price, p.description, c.name AS c_name, c.id AS c_id
                                 FROM products AS p
                               LEFT OUTER JOIN product_category AS pc on p.id = pc.product_id 
                               LEFT OUTER JOIN categories AS c on pc.category_id = c.id 
