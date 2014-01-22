@@ -16,12 +16,14 @@
 
   <p>
     <label>Category:</label>
-    <select name="category_id">
+    <div>
+    <select name="category_id" size=5>
       <option value="none" selected>-none-</option> 
       <% @categories.each do |category| %>
       <option value="<%= category["id"] %>"><%= category["name"] %></option>
       <% end %>
     </select>
+    </div>
   </p>
 
   <p>

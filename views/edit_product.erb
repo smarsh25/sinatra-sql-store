@@ -16,12 +16,14 @@
 
   <p>
     <label>Category:</label>
-    <select name="category_id">
+    <div>
+    <select name="category_id" size=5>
       <option value="none" <% if @product["c_name"] == nil %>selected<% end %>>-none-</option> 
       <% @categories.each do |category| %>
       <option value="<%= category["id"] %>" <% if @product["c_name"] == category["name"] %>selected<% end %>><%= category["name"] %></option>
       <% end %>
     </select>
+    </div>
   </p>
 
   <p>

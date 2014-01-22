@@ -1,0 +1,14 @@
+<p> Category: <%= @category_name %></p>
+<% if @no_products %>
+<p>   This Category does not have any products. </p>
+<%else%>
+<ul>
+  <% @products.each do |product| %>
+    <li><%= product["product_name"]%></li>
+  <% end %>
+</ul>
+<% end %>
+
+<form action="/categories/<%= @category_id %>/destroy" method="post">
+    <input type="submit" name="" value="Delete this category.">
+</form>
